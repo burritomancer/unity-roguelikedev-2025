@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
     
     private void OnExit(InputAction.CallbackContext ctx)
     {
-        Debug.Log("Exit");
+        Action.EscapeAction();
     }
     
     private void FixedUpdate()
@@ -54,7 +54,21 @@ public class Player : MonoBehaviour
 
     private void MovePlayer()
     {
-        transform.position += (Vector3)_moveAction.ReadValue<Vector2>();
-        GameManager.Instance.EndTurn();
+        Vector2 direction = _moveAction.ReadValue<Vector2>();
+        Vector2 roundedDirection = new Vector2(Mathf.Round(direction.x), Mathf.Round(direction.y));
+        Vector3 futurePosition = transform.position + (Vector3)roundedDirection;
+        
+        if (IsValidPosition(futurePosition))
+            Action.MovementAction(GetComponent<Entity>(), roundedDirection);
+    }
+    
+    private bool IsValidPosition(Vector3 futurePosition)
+    {
+        Vector3Int gridPosition = MapManager.Instance.FloorMap.WorldToCell(futurePosition);
+        if(!MapManager.Instance.InBounds(gridPosition.x, gridPosition.y)
+           || MapManager.Instance.ObstacleMap.HasTile(gridPosition)
+           || futurePosition == transform.position)
+            return false;
+        return true;
     }
 }
