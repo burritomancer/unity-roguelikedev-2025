@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     
     public bool IsPlayerTurn => isPlayerTurn;
     
+    public List<Entity> Entities => entities;
+    
     void Awake()
     {
         if (Instance == null)

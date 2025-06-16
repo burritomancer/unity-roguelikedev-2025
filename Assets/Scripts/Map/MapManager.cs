@@ -11,26 +11,28 @@ public class MapManager : MonoBehaviour
     [SerializeField] private int roomMaxSize = 10;
     [SerializeField] private int roomMinSize = 6;
     [SerializeField] private int maxRooms = 30;
-
-    [Header("Colors")]
-    [SerializeField] private Color32 darkColor = new Color32(0, 0, 0, 0);
-    [SerializeField] private Color32 lightColor = new Color32(255, 255, 255, 255);
-
+    
     [Header("Tiles")]
     [SerializeField] private TileBase floorTile;
     [SerializeField] private TileBase wallTile;
+    [SerializeField] private TileBase fogTile;
 
     [Header("Tilemaps")]
     [SerializeField] private Tilemap floorMap;
     [SerializeField] private Tilemap obstacleMap;
+    [SerializeField] private Tilemap fogMap;
     
     [Header("Features")]
+    [SerializeField] private List<Vector3Int> visibleTiles = new List<Vector3Int>();
+    [SerializeField] private Dictionary<Vector3Int, TileData> tiles = new Dictionary<Vector3Int, TileData>();
     [SerializeField] private List<RectangularRoom> rooms = new List<RectangularRoom>();
+    
     
     public TileBase FloorTile => floorTile;
     public TileBase WallTile => wallTile;
     public Tilemap FloorMap => floorMap;
     public Tilemap ObstacleMap => obstacleMap;
+    public Tilemap FogMap => fogMap;
     
     public List<RectangularRoom> Rooms => rooms;
     
@@ -44,8 +46,13 @@ public class MapManager : MonoBehaviour
     
     void Start()
     {
-        ProcGen procGen = new ProcGen();
+        ProcGen procGen = gameObject.AddComponent<ProcGen>();
         procGen.GenerateDungeon(width, height, roomMaxSize, roomMinSize, maxRooms, rooms);
+        
+        AddTileMapToDictionary(floorMap);
+        AddTileMapToDictionary(obstacleMap);
+        
+        SetupFogMap();
         
         Instantiate(Resources.Load<GameObject>("NPC"),
             new Vector3(40 - 5.5f, 25 + 0.5f, 0), Quaternion.identity).name = "NPC";
@@ -60,5 +67,73 @@ public class MapManager : MonoBehaviour
     {
         Instantiate(Resources.Load<GameObject>("Player"), 
             new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity).name = "Player";
+    }
+
+    public void UpdateFogMap(List<Vector3Int> playerFOV)
+    {
+        foreach (Vector3Int pos in visibleTiles)
+        {
+            if (!tiles[pos].isExplored)
+            {
+                tiles[pos].isExplored = true;
+            }
+            
+            tiles[pos].isVisible = false;
+            fogMap.SetColor(pos, new Color(1.0f, 1.0f, 1.0f, 0.5f));
+        }
+        
+        visibleTiles.Clear();
+
+        foreach (Vector3Int pos in playerFOV)
+        {
+            tiles[pos].isVisible = true;
+            fogMap.SetColor(pos, Color.clear);
+            visibleTiles.Add(pos);
+        }
+    }
+
+    public void SetEntitiesVisibilities()
+    {
+        foreach (Entity entity in GameManager.Instance.Entities)
+        {
+            if (entity.GetComponent<Player>())
+            {
+                continue;
+            }
+
+            Vector3Int entityPosition = floorMap.WorldToCell(entity.transform.position);
+
+            if (visibleTiles.Contains(entityPosition))
+            {
+                entity.GetComponent<SpriteRenderer>().enabled = true;
+            }
+            else
+            {
+                entity.GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+    }
+
+    private void AddTileMapToDictionary(Tilemap tilemap)
+    {
+        foreach (Vector3Int pos in tilemap.cellBounds.allPositionsWithin)
+        {
+            if (!tilemap.HasTile(pos))
+            {
+                continue;
+            }
+            
+            TileData tile = new TileData();
+            tiles.Add(pos, tile);
+        }
+    }
+
+    private void SetupFogMap()
+    {
+        foreach (Vector3Int pos in tiles.Keys)
+        {
+            fogMap.SetTile(pos, fogTile);
+            fogMap.SetTileFlags(pos, TileFlags.None);
+        }
     }
 }
