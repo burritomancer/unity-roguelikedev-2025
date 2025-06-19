@@ -271,10 +271,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0741bd3d395722f4b9ac693583f26c28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 0.1
+  baseTime: 0.075
+  delayTime: 0
   isPlayerTurn: 1
-  entityNum: 0
+  actorNum: 0
   entities: []
+  actors: []
+  deadSprite: {fileID: -4773906121362952642, guid: a1e3943b28c56d348a7d84575ecc1b6b, type: 3}
 --- !u!4 &134278054
 Transform:
   m_ObjectHideFlags: 0
@@ -546,6 +549,7 @@ MonoBehaviour:
   roomMaxSize: 10
   roomMinSize: 6
   maxRooms: 30
+  maxMonstersPerRoom: 2
   floorTile: {fileID: 11400000, guid: 4238d8fa8525e8845a7df16922e2a7aa, type: 2}
   wallTile: {fileID: 11400000, guid: b4266546c97658742aed86a8d7a38937, type: 2}
   fogTile: {fileID: 11400000, guid: 74f4e6d659ce9f24c8bcf444e6886779, type: 2}

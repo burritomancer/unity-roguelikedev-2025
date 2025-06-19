@@ -10,7 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 9015253417963564557}
   - component: {fileID: 4215834603074487839}
-  - component: {fileID: 3882854927391408908}
+  - component: {fileID: 7166601983886219446}
+  - component: {fileID: 5844886914388962005}
+  - component: {fileID: -7915889287789654134}
+  - component: {fileID: -1775997114069185598}
   m_Layer: 0
   m_Name: Troll
   m_TagString: Untagged
@@ -88,7 +91,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3882854927391408908
+--- !u!114 &7166601983886219446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,10 +100,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 8140647072604311516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc90aac2e9ebb6a40bba6e6d4a54444f, type: 3}
+  m_Script: {fileID: 11500000, guid: 73fdd49be775fa343972664ffa326cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSentient: 1
   blocksMovement: 1
+  isAlive: 1
   fieldOfViewRange: 8
   fieldOfView: []
+  aI: {fileID: -1775997114069185598}
+--- !u!114 &5844886914388962005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8140647072604311516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fefd92b91dc11b94c87008ff1c386bd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp: 16
+  hp: 16
+  defense: 1
+  power: 4
+  target: {fileID: 0}
+--- !u!114 &-7915889287789654134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8140647072604311516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7a9e04b80d656d47a3f1d3f3462ae1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-1775997114069185598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8140647072604311516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8b80db9f83a02c4e8989fa30acb992f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aStar: {fileID: -7915889287789654134}
+  fighter: {fileID: 5844886914388962005}
+  isFighting: 0
