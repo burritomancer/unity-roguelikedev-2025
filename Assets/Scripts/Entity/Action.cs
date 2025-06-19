@@ -6,6 +6,28 @@ public static class Action
     {
         Debug.Log("Quit");
     }
+
+    public static bool BumpAction(Entity entity, Vector2 direction)
+    {
+        Entity target = GameManager.Instance.GetBlockingEntityAtLocation(entity.transform.position + (Vector3)direction);
+
+        if (target)
+        {
+            MeleeAction(target);
+            return false;
+        }
+        else
+        {
+            MovementAction(entity, direction);
+            return true;
+        }
+    }
+
+    public static void MeleeAction(Entity target)
+    {
+        Debug.Log($"You kick the {target.name}, much to its annoyance!");
+        GameManager.Instance.EndTurn();
+    }
     
     public static void MovementAction(Entity entity, Vector2 direction)
     {
@@ -16,6 +38,14 @@ public static class Action
     
     public static void SkipAction(Entity entity)
     {
+        if (entity.GetComponent<Player>())
+        {
+            //Debug.Log("You decided to skip your turn.");
+        }
+        else
+        {
+            //Debug.Log($"The {entity.name} wonders when it will get to take a real turn.");
+        }
         GameManager.Instance.EndTurn();
     }
 }

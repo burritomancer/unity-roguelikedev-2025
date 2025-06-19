@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 public class Entity : MonoBehaviour
 {
-    [SerializeField] private bool isSentient = false;
+    [SerializeField] private bool isSentient, blocksMovement;
 
     [SerializeField] private int fieldOfViewRange = 8;
     [SerializeField] private List<Vector3Int> fieldOfView;
     private AdamMilVisibility algorithm;
     
     public bool IsSentient => isSentient;
+    public bool BlocksMovement => blocksMovement;
 
     void Start()
     {
