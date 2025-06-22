@@ -29,14 +29,25 @@ public static class Action
 
         string attackDesc = $"{actor.name} attacks {target.name}";
 
+        string colorHex = "";
+
+        if (actor.GetComponent<Player>())
+        {
+            colorHex = "#ffffff";
+        }
+        else
+        {
+            colorHex = "#d1a3a4";
+        }
+
         if (damage > 0)
         {
-            Debug.Log($"{attackDesc} for {damage} hit points.");
+            UIManager.Instance.AddMessage($"{attackDesc} for {damage} hit points.", colorHex);
             target.GetComponent<Fighter>().Hp -= damage;
         }
         else
         {
-            Debug.Log($"{attackDesc} but does no damage.");
+            UIManager.Instance.AddMessage($"{attackDesc} but does no damage.", colorHex);
         }
         GameManager.Instance.EndTurn();
     }
